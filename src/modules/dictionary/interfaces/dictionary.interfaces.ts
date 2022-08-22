@@ -37,8 +37,8 @@ export interface IDescription extends IDescriptionCore {
 }
 
 export interface IClassCore {
-  word?: string;
-  language?: string;
+  className?: string;
+  description?: string;
 }
 
 export interface IClass extends IClassCore {
@@ -55,8 +55,9 @@ export interface IVideo extends IVideoCore {
 }
 
 export interface ISentenceCore {
-  word?: string;
-  language?: string;
+  original?: string;
+  translateValue?: string;
+  toLanguage?: string;
 }
 
 export interface ISentence extends ISentenceCore {
@@ -64,8 +65,7 @@ export interface ISentence extends ISentenceCore {
 }
 
 export interface INoteCore {
-  word?: string;
-  language?: string;
+  content?: string;
 }
 
 export interface INote extends INoteCore {

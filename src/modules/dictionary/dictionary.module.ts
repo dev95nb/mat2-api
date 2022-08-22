@@ -12,7 +12,16 @@ import {
   SentenceSchema,
   NoteSchema,
 } from './schemas/dictionary.schema';
-import { DictionaryRepository } from './dictionary.repository';
+import {
+  ClassRepository,
+  DescriptionRepository,
+  DictionaryRepository,
+  NoteRepository,
+  PronunciationRepository,
+  SentenceRepository,
+  TranslateRepository,
+  VideoRepository,
+} from './dictionary.repository';
 
 @Module({
   imports: [
@@ -28,6 +37,16 @@ import { DictionaryRepository } from './dictionary.repository';
     ]),
   ],
   controllers: [DictionaryController],
-  providers: [DictionaryService, DictionaryRepository],
+  providers: [
+    DictionaryService,
+    DictionaryRepository,
+    PronunciationRepository,
+    TranslateRepository,
+    DescriptionRepository,
+    ClassRepository,
+    VideoRepository,
+    SentenceRepository,
+    NoteRepository,
+  ],
 })
 export class DictionaryModule {}

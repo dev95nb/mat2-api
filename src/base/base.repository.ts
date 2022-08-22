@@ -16,7 +16,7 @@ export class BaseRepository<T extends Document> extends EventEmitter {
     return this.model.deleteOne(filter);
   }
 
-  async find(obj: any, skip: number, limit: number): Promise<T> {
+  async find(obj: any, skip = 0, limit = 0): Promise<T> {
     return this.model.find(obj).skip(skip).limit(limit).lean();
   }
 

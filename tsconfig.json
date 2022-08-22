@@ -20,7 +20,9 @@
     "paths": {
       "$modules/*": ["src/modules/*"],
       "$guards/*": ["src/guards/*"],
-      "$constants/*": ["src/constants/*"]
+      "$constants/*": ["src/constants/*"],
+      "$base/*": ["src/base/*"],
+      "$schemas/*": ["src/schemas/*"]
     }
   }
 }

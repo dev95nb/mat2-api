@@ -1,101 +1,144 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { DictionaryService } from './dictionary.service';
-import { DictionaryDto } from './dto/dictionary.dto';
+import { TranslateDto, PronunciationDto, ClassDto, SentenceDto, NoteDto } from './dto/dictionary.dto';
 
-@Controller('auth')
+@Controller('dictionary')
 export class DictionaryController {
   constructor(private dictionaryService: DictionaryService) {}
   @Get()
-  async getDefineWord(@Body() auth: AuthDto) {
-    return this.dictionaryService.getDefineWord(auth);
+  async getDefineWord(@Query() query: {word: string}) {
+    const word = query.word;
+    return this.dictionaryService.getDefineWord(word);
   }
 
   @Get()
-  async searchWord(@Body() auth: AuthDto) {
-    return this.dictionaryService.searchWord(auth);
+  async searchWord(@Query() query: {word: string}) {
+    const word = query.word;
+    return this.dictionaryService.searchWord(word);
   }
 
   // Translate
-  @Get()
-  async getTranslate(@Body() auth: AuthDto) {
-    return this.dictionaryService.getTranslate(auth);
+  @Get(':dictionaryId/translate')
+  async getTranslate(@Param() params : {dictionaryId: string}) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.getTranslate(dictionaryId);
   }
 
-  @Put()
-  async editTranslate(@Body() auth: AuthDto) {
-    return this.dictionaryService.editTranslate(auth);
+  @Put(':dictionaryId/translate')
+  async editTranslate(@Param() params : {dictionaryId: string}, @Body() body: TranslateDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.editTranslate(dictionaryId, body);
   }
 
-  @Post()
-  async addTranslate(@Body() auth: AuthDto) {
-    return this.dictionaryService.addTranslate(auth);
+  @Post(':dictionaryId/translate')
+  async addTranslate(@Param() params : {dictionaryId: string}, @Body() body: TranslateDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.addTranslate(dictionaryId, body);
   }
 
-  @Delete()
-  async deleteTranslate(@Body() auth: AuthDto) {
-    return this.dictionaryService.deleteTranslate(auth);
+  @Delete(':dictionaryId/translate/:translateId')
+  async deleteTranslate(@Param() params : {dictionaryId: string, translateId: string}) {
+    const {dictionaryId, translateId} = params;
+    return this.dictionaryService.deleteTranslate(dictionaryId, translateId);
   }
 
-  // Audio
-  @Get()
-  async getAudio(@Body() auth: AuthDto) {
-    return this.dictionaryService.getAudio(auth);
+  // Pronunciation
+  @Get(':dictionaryId/pronunciation')
+  async getPronunciation(@Param() params : {dictionaryId: string}) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.getPronunciation(dictionaryId);
   }
 
-  @Put()
-  async editAudio(@Body() auth: AuthDto) {
-    return this.dictionaryService.editAudio(auth);
+  @Put(':dictionaryId/pronunciation')
+  async editPronunciation(@Param() params : {dictionaryId: string}, @Body() body: PronunciationDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.editPronunciation(dictionaryId, body);
   }
 
-  @Post()
-  async addAudio(@Body() auth: AuthDto) {
-    return this.dictionaryService.addAudio(auth);
+  @Post(':dictionaryId/pronunciation')
+  async addPronunciation(@Param() params : {dictionaryId: string}, @Body() body: PronunciationDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.addPronunciation(dictionaryId, body);
   }
 
-  @Delete()
-  async deleteAudio(@Body() auth: AuthDto) {
-    return this.dictionaryService.deleteAudio(auth);
+  @Delete(':dictionaryId/:pronunciationId')
+  async deletePronunciation(@Param() params : {dictionaryId: string, pronunciationId: string}) {
+    const {dictionaryId, pronunciationId} = params;
+    return this.dictionaryService.deletePronunciation(dictionaryId, pronunciationId);
   }
 
   // Class
-  @Get()
-  async getClass(@Body() auth: AuthDto) {
-    return this.dictionaryService.getClass(auth);
+  @Get(':dictionaryId/class')
+  async getClass(@Param() params : {dictionaryId: string}) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.getClass(dictionaryId);
   }
 
-  @Put()
-  async editClass(@Body() auth: AuthDto) {
-    return this.dictionaryService.editClass(auth);
+  @Put(':dictionaryId/class')
+  async editClass(@Param() params : {dictionaryId: string}, @Body() body: ClassDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.editClass(dictionaryId, body);
   }
 
-  @Post()
-  async addClass(@Body() auth: AuthDto) {
-    return this.dictionaryService.addClass(auth);
+  @Post(':dictionaryId/class')
+  async addClass(@Param() params : {dictionaryId: string}, @Body() body: ClassDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.addClass(dictionaryId, body);
   }
 
-  @Delete()
-  async deleteClass(@Body() auth: AuthDto) {
-    return this.dictionaryService.deleteClass(auth);
+  @Delete(':dictionaryId/:classId')
+  async deleteClass(@Param() params : {dictionaryId: string, classId: string}) {
+    const {dictionaryId, classId} = params;
+    return this.dictionaryService.deleteClass(dictionaryId, classId);
   }
 
   // Sentence
-  @Get()
-  async getSentence(@Body() auth: AuthDto) {
-    return this.dictionaryService.getSentence(auth);
+  @Get(':dictionaryId/sentence')
+  async getSentence(@Param() params : {dictionaryId: string}) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.getSentence(dictionaryId);
   }
 
-  @Put()
-  async editSentence(@Body() auth: AuthDto) {
-    return this.dictionaryService.editSentence(auth);
+  @Put(':dictionaryId/sentence')
+  async editSentence(@Param() params : {dictionaryId: string}, @Body() body: SentenceDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.editSentence(dictionaryId, body);
   }
 
-  @Post()
-  async addSentence(@Body() auth: AuthDto) {
-    return this.dictionaryService.addSentence(auth);
+  @Post(':dictionaryId/sentence')
+  async addSentence(@Param() params : {dictionaryId: string}, @Body() body: SentenceDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.addSentence(dictionaryId, body);
   }
 
-  @Delete()
-  async deleteSentence(@Body() auth: AuthDto) {
-    return this.dictionaryService.deleteSentence(auth);
+  @Delete(':dictionaryId/:sentenceId')
+  async deleteSentence(@Param() params : {dictionaryId: string, sentenceId: string}) {
+    const {dictionaryId, sentenceId} = params;
+    return this.dictionaryService.deleteSentence(dictionaryId, sentenceId);
+  }
+
+  // Note
+  @Get(':dictionaryId/note')
+  async getNote(@Param() params : {dictionaryId: string}) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.getNote(dictionaryId);
+  }
+
+  @Put(':dictionaryId/note')
+  async editNote(@Param() params : {dictionaryId: string}, @Body() body: NoteDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.editNote(dictionaryId, body);
+  }
+
+  @Post(':dictionaryId/note')
+  async addNote(@Param() params : {dictionaryId: string}, @Body() body: NoteDto) {
+    const dictionaryId = params.dictionaryId;
+    return this.dictionaryService.addNote(dictionaryId, body);
+  }
+
+  @Delete(':dictionaryId/:noteId')
+  async deleteNote(@Param() params : {dictionaryId: string, noteId: string}) {
+    const {dictionaryId, noteId} = params;
+    return this.dictionaryService.deleteNote(dictionaryId, noteId);
   }
 }

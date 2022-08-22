@@ -91,7 +91,7 @@ const VideoSchema = {
   schema: new Schema(
     {
       videoId: String,
-      type: {
+      typeVideo: {
         type: String,
       },
       dictionary: { type: Schema.Types.ObjectId, ref: 'Dictionary' },
