@@ -1,8 +1,25 @@
-import { IDictionaryModel, ITranslateModel, IPronunciationModel, IDescriptionModel, IClassModel, IVideoModel, ISentenceModel, INoteModel } from './dictionary.model';
+import {
+  IDictionaryModel,
+  ITranslateModel,
+  IPronunciationModel,
+  IDescriptionModel,
+  IClassModel,
+  IVideoModel,
+  ISentenceModel,
+  INoteModel,
+} from './dictionary.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseRepository } from '$base/base.repository';
-import { DescriptionSchema, TranslateSchema, PronunciationSchema, ClassSchema, SentenceSchema, VideoSchema, NoteSchema } from './schemas/dictionary.schema';
+import {
+  DescriptionSchema,
+  TranslateSchema,
+  PronunciationSchema,
+  ClassSchema,
+  SentenceSchema,
+  VideoSchema,
+  NoteSchema,
+} from './schemas/dictionary.schema';
 @Injectable()
 export class DictionaryRepository extends BaseRepository<IDictionaryModel> {
   constructor(@InjectModel(DescriptionSchema.name) model) {
@@ -33,7 +50,6 @@ export class PronunciationRepository extends BaseRepository<IPronunciationModel>
   }
 }
 
-
 @Injectable()
 export class TranslateRepository extends BaseRepository<ITranslateModel> {
   constructor(@InjectModel(TranslateSchema.name) model) {
@@ -44,7 +60,6 @@ export class TranslateRepository extends BaseRepository<ITranslateModel> {
     return this.model.findById(userId).lean();
   }
 }
-
 
 @Injectable()
 export class DescriptionRepository extends BaseRepository<IDescriptionModel> {
@@ -78,7 +93,6 @@ export class VideoRepository extends BaseRepository<IVideoModel> {
     return this.model.findById(userId).lean();
   }
 }
-
 
 @Injectable()
 export class SentenceRepository extends BaseRepository<ISentenceModel> {
