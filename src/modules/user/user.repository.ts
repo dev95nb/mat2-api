@@ -14,6 +14,6 @@ export class UserRepository extends BaseRepository<IUserModel> {
   }
 
   async getUserByOpenId(openId: string) {
-    return this.model.findOne({ openId }).lean();
+    return this.model.findOne({ openId });
   }
 }

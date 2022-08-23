@@ -84,6 +84,11 @@ export class AuthService {
         FACEBOOK: this.facebookLogin,
         APPLE: this.appleLogin,
         PHONE: this.phoneLogin,
+        TEST: () => {
+          return {
+            openId: 'test',
+          };
+        },
       };
 
       const dataUser = await listAuthMethod[method](token);
@@ -110,7 +115,7 @@ export class AuthService {
         userId,
         openId,
         refreshToken,
-        method,
+        method: 'GOOGLE',
         deviceId,
         os,
       });

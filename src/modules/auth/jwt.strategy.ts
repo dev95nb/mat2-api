@@ -27,7 +27,7 @@ export class JwtAtStrategy extends PassportStrategy(
   }
 
   async validate(payload: _IPayload) {
-    return { userId: payload.userId, sessionId: payload.sessionId };
+    return { userId: payload.userId };
   }
 }
 
@@ -50,7 +50,6 @@ export class JwtRtStrategy extends PassportStrategy(
     const refreshToken = req.headers.authorization.replace('Bearer', '').trim();
     return {
       userId: payload.userId,
-      sessionId: payload.sessionId,
       refreshToken,
     };
   }

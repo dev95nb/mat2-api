@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   ClassRepository,
   DescriptionRepository,
@@ -29,8 +29,45 @@ export class DictionaryService {
     private readonly noteRepo: NoteRepository,
   ) {}
 
-  async getDefineWord(word: string) {
-    return this.dictionaryRepo.findOne({ word });
+  async getDefineWord(word: string, source: string, destination: string) {
+    const getWord = await this.dictionaryRepo.findOne({
+      word,
+      source,
+      destination,
+    });
+
+    if (!getWord) {
+      const saveWord = await this.dictionaryRepo.createOne({
+        word,
+        source,
+        destination,
+      });
+      return {
+        word: {
+          _id: saveWord.id,
+          word,
+          source,
+          destination,
+          createdAt: saveWord.createdAt,
+          updatedAt: saveWord.updatedAt,
+        },
+        translate: [],
+        description: [],
+      };
+    }
+
+    const getTranslate = await this.translateRepo.find({
+      dictionary: getWord._id,
+    });
+
+    const getDescription = await this.descriptionRepo.find({
+      dictionary: getWord._id,
+    });
+    return {
+      word: getWord,
+      translate: getTranslate,
+      description: getDescription,
+    };
   }
 
   async searchWord(word: string) {
@@ -42,11 +79,41 @@ export class DictionaryService {
     return this.translateRepo.find({ dictionary: dictionaryId });
   }
 
-  async editTranslate(dictionaryId: string, data: ITranslateCore) {}
+  async editTranslate(
+    userId: string,
+    dictionaryId: string,
+    translateId: string,
+    data: ITranslateCore,
+  ) {
+    return this.translateRepo.editTranslate(
+      { dictionary: dictionaryId, translateId, creator: userId },
+      data,
+    );
+  }
 
-  async addTranslate(dictionaryId: string, data: ITranslateCore) {}
+  async addTranslate(
+    userId: string,
+    dictionaryId: string,
+    data: ITranslateCore,
+  ) {
+    const obj = Object.assign(data, {
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+    return this.translateRepo.addTranslate(obj);
+  }
 
-  async deleteTranslate(dictionaryId: string, translateId: string) {}
+  async deleteTranslate(
+    userId: string,
+    dictionaryId: string,
+    translateId: string,
+  ) {
+    return this.translateRepo.deleteTranslate({
+      _id: translateId,
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+  }
 
   // pronunciation
   async getPronunciation(dictionaryId: string) {

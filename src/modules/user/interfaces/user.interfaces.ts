@@ -10,7 +10,3 @@ export interface IUser extends IUserCore {
   userId?: string;
   _id?: string;
 }
-
-export interface RequestWithUser extends Request {
-  user: IUser;
-}

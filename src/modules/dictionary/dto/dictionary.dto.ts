@@ -3,11 +3,11 @@ import { IsBoolean, IsString, MaxLength } from 'class-validator';
 export class TranslateDto {
   @IsString()
   @MaxLength(50)
-  word?: string;
+  toLanguage?: string;
 
   @IsString()
   @MaxLength(50)
-  language?: string;
+  translateValue?: string;
 }
 
 export class PronunciationDto {

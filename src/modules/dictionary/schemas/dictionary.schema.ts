@@ -1,3 +1,4 @@
+import { aggregatePaginatePLugin } from '$utils/mongoose';
 import { Schema } from 'mongoose';
 
 const DictionarySchema = {
@@ -9,10 +10,13 @@ const DictionarySchema = {
         required: true,
         unique: true,
       },
-      language: {
+      source: {
         type: String,
       },
-      creator: String,
+      destination: {
+        type: String,
+      },
+      creator: { type: Schema.Types.ObjectId, ref: 'User' },
     },
     {
       timestamps: true,
@@ -41,7 +45,10 @@ const TranslateSchema = {
   schema: new Schema(
     {
       toLanguage: String,
-      translateValue: String,
+      translateValue: {
+        type: String,
+        unique: true,
+      },
       isVerify: Boolean,
       verifyBy: { type: Schema.Types.ObjectId, ref: 'User' },
       creator: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -125,6 +132,8 @@ const NoteSchema = {
     { timestamps: true },
   ),
 };
+
+TranslateSchema.schema.plugin(aggregatePaginatePLugin);
 
 export {
   DictionarySchema,

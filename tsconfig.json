@@ -22,7 +22,8 @@
       "$guards/*": ["src/guards/*"],
       "$constants/*": ["src/constants/*"],
       "$base/*": ["src/base/*"],
-      "$schemas/*": ["src/schemas/*"]
+      "$schemas/*": ["src/schemas/*"],
+      "$utils/*": ["src/utils/*"],
     }
   }
 }

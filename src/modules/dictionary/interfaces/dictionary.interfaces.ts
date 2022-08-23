@@ -1,6 +1,9 @@
 export interface IDictionaryCore {
   word?: string;
-  language?: string;
+  source?: string;
+  destination?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IDictionary extends IDictionaryCore {
@@ -19,8 +22,8 @@ export interface IPronunciation extends IPronunciationCore {
 }
 
 export interface ITranslateCore {
-  word?: string;
-  language?: string;
+  toLanguage?: string;
+  translateValue?: string;
 }
 
 export interface ITranslate extends ITranslateCore {

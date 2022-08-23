@@ -1,7 +1,7 @@
+import { IRequest } from '$base/base.interface';
 import { JwtAuthGuard } from '$guards/jwt.guard';
 import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import { UserEditDto } from './dto/user.dto';
-import { RequestWithUser } from './interfaces/user.interfaces';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -10,7 +10,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getDetail(@Req() req: RequestWithUser) {
+  async getDetail(@Req() req: IRequest) {
     const { userId } = req.user;
     return await this.service.getUserById(userId);
   }
@@ -18,7 +18,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Put()
   async updateUserDetail(
-    @Req() req: RequestWithUser,
+    @Req() req: IRequest,
     @Body()
     body: UserEditDto,
   ) {

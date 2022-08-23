@@ -19,10 +19,12 @@ import {
   SentenceSchema,
   VideoSchema,
   NoteSchema,
+  DictionarySchema,
 } from './schemas/dictionary.schema';
+import { ITranslateCore } from './interfaces/dictionary.interfaces';
 @Injectable()
 export class DictionaryRepository extends BaseRepository<IDictionaryModel> {
-  constructor(@InjectModel(DescriptionSchema.name) model) {
+  constructor(@InjectModel(DictionarySchema.name) model) {
     super(model);
   }
 
@@ -56,8 +58,17 @@ export class TranslateRepository extends BaseRepository<ITranslateModel> {
     super(model);
   }
 
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
+  async editTranslate(filter: any, data: ITranslateCore) {
+    await this.model.updateOne(filter, data);
+    return this.model.findOne(filter);
+  }
+
+  async addTranslate(data: any) {
+    return this.model.create(data);
+  }
+
+  async deleteTranslate(filter: any) {
+    return this.model.deleteOne(filter);
   }
 }
 
