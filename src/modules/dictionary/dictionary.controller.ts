@@ -35,7 +35,7 @@ export class DictionaryController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('search')
   async searchWord(@Query() query: { word: string }) {
     const word = query.word;
     return this.dictionaryService.searchWord(word);
@@ -195,7 +195,7 @@ export class DictionaryController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':dictionaryId/:classId')
+  @Delete(':dictionaryId/class/:classId')
   async deleteClass(
     @Param() params: { dictionaryId: string; classId: string },
     @Req() req: IRequest,
@@ -247,7 +247,7 @@ export class DictionaryController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':dictionaryId/:sentenceId')
+  @Delete(':dictionaryId/sentence/:sentenceId')
   async deleteSentence(
     @Param() params: { dictionaryId: string; sentenceId: string },
     @Req() req: IRequest,
@@ -298,7 +298,7 @@ export class DictionaryController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':dictionaryId/:noteId')
+  @Delete(':dictionaryId/note/:noteId')
   async deleteNote(
     @Param() params: { dictionaryId: string; noteId: string },
     @Req() req: IRequest,

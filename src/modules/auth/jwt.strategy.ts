@@ -50,6 +50,7 @@ export class JwtRtStrategy extends PassportStrategy(
     const refreshToken = req.headers.authorization.replace('Bearer', '').trim();
     return {
       userId: payload.userId,
+      sessionId: payload.sessionId,
       refreshToken,
     };
   }

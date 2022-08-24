@@ -4,7 +4,7 @@ import axios from 'axios';
 import { OAuth2Client } from 'google-auth-library';
 import appleSignin from 'apple-signin-auth';
 import { IAuthCheck, IPayloadAuth } from './interfaces/auth.interface';
-import { AuthRepository } from './auth.repository';
+import { SessionRepository } from './auth.repository';
 import { UserService } from '$modules/user/user.service';
 
 const CLIENT_ID =
@@ -17,7 +17,7 @@ const privateKey =
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly repo: AuthRepository,
+    private readonly sessionRepo: SessionRepository,
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
@@ -106,19 +106,30 @@ export class AuthService {
         userId = user.id;
       }
 
-      const payload = { userId };
+      let sessionId = null;
+      const getSession = await this.sessionRepo.findSession(
+        deviceId,
+        openId,
+        userId,
+        os,
+      );
+      if (getSession) {
+        sessionId = getSession._id.toString();
+      } else {
+        const createNewSession = await this.sessionRepo.createOne({
+          openId,
+          method: 'GOOGLE',
+          os,
+          deviceId,
+          userId,
+        });
+        sessionId = createNewSession.id;
+      }
+
+      const payload = { userId, sessionId };
       const { accessToken, refreshToken } = await this.getToken(payload);
 
-      // save session login
-      await this.repo.deleteOne({ userId, openId, deviceId, os });
-      await this.repo.createOne({
-        userId,
-        openId,
-        refreshToken,
-        method: 'GOOGLE',
-        deviceId,
-        os,
-      });
+      await this.sessionRepo.updateOneById(sessionId, { refreshToken });
 
       return {
         accessToken,
@@ -126,6 +137,22 @@ export class AuthService {
       };
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async renewToken(sessionId: string, userId: string, refreshToken: string) {
+    const getSession = await this.sessionRepo.findOneById(sessionId);
+    if (
+      getSession &&
+      refreshToken === getSession.refreshToken &&
+      userId === getSession.userId.toString()
+    ) {
+      const payload = { userId, sessionId };
+      const { accessToken, refreshToken } = await this.getToken(payload);
+      await this.sessionRepo.updateOneById(sessionId, { refreshToken });
+      return { accessToken, refreshToken };
+    } else {
+      throw new Error('');
     }
   }
 }

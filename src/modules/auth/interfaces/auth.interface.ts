@@ -19,4 +19,5 @@ export interface IAuthCheck {
 
 export interface IPayloadAuth {
   userId: string;
+  sessionId: string;
 }
