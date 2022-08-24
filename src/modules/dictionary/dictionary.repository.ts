@@ -21,7 +21,14 @@ import {
   NoteSchema,
   DictionarySchema,
 } from './schemas/dictionary.schema';
-import { ITranslateCore } from './interfaces/dictionary.interfaces';
+import {
+  IClassCore,
+  IDescriptionCore,
+  INoteCore,
+  IPronunciationCore,
+  ISentenceCore,
+  ITranslateCore,
+} from './interfaces/dictionary.interfaces';
 @Injectable()
 export class DictionaryRepository extends BaseRepository<IDictionaryModel> {
   constructor(@InjectModel(DictionarySchema.name) model) {
@@ -47,8 +54,26 @@ export class PronunciationRepository extends BaseRepository<IPronunciationModel>
     super(model);
   }
 
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
+  async getPronunciation(match: any, page: number, perPage: number) {
+    const query = this.model.aggregate([
+      {
+        $match: match,
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
+  }
+
+  async editPronunciation(filter: any, data: IPronunciationCore) {
+    await this.model.updateOne(filter, data);
+    return this.model.findOne(filter);
+  }
+
+  async addPronunciation(data: any) {
+    return this.model.create(data);
+  }
+
+  async deletePronunciation(filter: any) {
+    return this.model.deleteOne(filter);
   }
 }
 
@@ -87,8 +112,26 @@ export class DescriptionRepository extends BaseRepository<IDescriptionModel> {
     super(model);
   }
 
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
+  async editDescription(filter: any, data: IDescriptionCore) {
+    await this.model.updateOne(filter, data);
+    return this.model.findOne(filter);
+  }
+
+  async addDescription(data: any) {
+    return this.model.create(data);
+  }
+
+  async deleteDescription(filter: any) {
+    return this.model.deleteOne(filter);
+  }
+
+  async getDescription(match: any, page: number, perPage: number) {
+    const query = this.model.aggregate([
+      {
+        $match: match,
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
   }
 }
 
@@ -98,8 +141,26 @@ export class ClassRepository extends BaseRepository<IClassModel> {
     super(model);
   }
 
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
+  async editClass(filter: any, data: IClassCore) {
+    await this.model.updateOne(filter, data);
+    return this.model.findOne(filter);
+  }
+
+  async addClass(data: any) {
+    return this.model.create(data);
+  }
+
+  async deleteClass(filter: any) {
+    return this.model.deleteOne(filter);
+  }
+
+  async getClass(match: any, page: number, perPage: number) {
+    const query = this.model.aggregate([
+      {
+        $match: match,
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
   }
 }
 
@@ -107,10 +168,6 @@ export class ClassRepository extends BaseRepository<IClassModel> {
 export class VideoRepository extends BaseRepository<IVideoModel> {
   constructor(@InjectModel(VideoSchema.name) model) {
     super(model);
-  }
-
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
   }
 }
 
@@ -120,8 +177,26 @@ export class SentenceRepository extends BaseRepository<ISentenceModel> {
     super(model);
   }
 
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
+  async editSentence(filter: any, data: ISentenceCore) {
+    await this.model.updateOne(filter, data);
+    return this.model.findOne(filter);
+  }
+
+  async addSentence(data: any) {
+    return this.model.create(data);
+  }
+
+  async deleteSentence(filter: any) {
+    return this.model.deleteOne(filter);
+  }
+
+  async getSentence(match: any, page: number, perPage: number) {
+    const query = this.model.aggregate([
+      {
+        $match: match,
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
   }
 }
 
@@ -131,7 +206,25 @@ export class NoteRepository extends BaseRepository<INoteModel> {
     super(model);
   }
 
-  async getUserDetail(userId: string) {
-    return this.model.findById(userId).lean();
+  async editNote(filter: any, data: INoteCore) {
+    await this.model.updateOne(filter, data);
+    return this.model.findOne(filter);
+  }
+
+  async addNote(data: any) {
+    return this.model.create(data);
+  }
+
+  async deleteNote(filter: any) {
+    return this.model.deleteOne(filter);
+  }
+
+  async getNote(match: any, page: number, perPage: number) {
+    const query = this.model.aggregate([
+      {
+        $match: match,
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
   }
 }

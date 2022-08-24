@@ -162,6 +162,11 @@ const NoteSchema = {
 };
 
 TranslateSchema.schema.plugin(aggregatePaginatePLugin);
+DescriptionSchema.schema.plugin(aggregatePaginatePLugin);
+PronunciationSchema.schema.plugin(aggregatePaginatePLugin);
+ClassSchema.schema.plugin(aggregatePaginatePLugin);
+SentenceSchema.schema.plugin(aggregatePaginatePLugin);
+NoteSchema.schema.plugin(aggregatePaginatePLugin);
 
 export {
   DictionarySchema,
