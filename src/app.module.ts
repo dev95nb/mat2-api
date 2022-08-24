@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { AuthModule } from '$modules/auth/auth.module';
 import { UserModule } from '$modules/user/user.module';
 import { DictionaryModule } from '$modules/dictionary/dictionary.module';
+import { UploadModule } from '$modules/upload/upload.module';
+import { CronjobModule } from '$modules/cronjob/cronjob.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { DictionaryModule } from '$modules/dictionary/dictionary.module';
     AuthModule,
     UserModule,
     DictionaryModule,
+    UploadModule,
+    CronjobModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
