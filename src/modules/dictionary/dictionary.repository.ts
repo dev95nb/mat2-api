@@ -70,6 +70,15 @@ export class TranslateRepository extends BaseRepository<ITranslateModel> {
   async deleteTranslate(filter: any) {
     return this.model.deleteOne(filter);
   }
+
+  async getTranslate(match: any, page: number, perPage: number) {
+    const query = this.model.aggregate([
+      {
+        $match: match,
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
+  }
 }
 
 @Injectable()

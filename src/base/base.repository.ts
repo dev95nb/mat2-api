@@ -1,14 +1,18 @@
 import { Document, Model } from 'mongoose';
 import { EventEmitter } from 'events';
-import { ICustomMongoModel } from './base.interface';
+import { IAggregateOption } from './base.interface';
+
+interface _ICustomMongoModel<T extends Document> extends Model<T> {
+  aggregatePaginate(query: any, options: IAggregateOption): Promise<T[]>;
+}
 
 export class BaseRepository<T extends Document> extends EventEmitter {
-  constructor(protected readonly model: ICustomMongoModel<T>) {
+  constructor(protected readonly model: _ICustomMongoModel<T>) {
     super();
     this.model = model;
   }
 
-  async createOne(entity: any): Promise<T> {
+  async createOne(entity: any) {
     return new this.model(entity).save();
   }
 
@@ -16,8 +20,8 @@ export class BaseRepository<T extends Document> extends EventEmitter {
     return this.model.deleteOne(filter);
   }
 
-  async find(obj: any, skip = 0, limit = 0): Promise<T> {
-    return this.model.find(obj).skip(skip).limit(limit).lean();
+  async find(filter: any) {
+    return this.model.find(filter);
   }
 
   async findOneById(id: string): Promise<T> {

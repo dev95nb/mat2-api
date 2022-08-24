@@ -1,3 +1,4 @@
+import { ObjectId } from '$utils/mongoose';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   ClassRepository,
@@ -75,8 +76,14 @@ export class DictionaryService {
   }
 
   // translate
-  async getTranslate(dictionaryId: string) {
-    return this.translateRepo.find({ dictionary: dictionaryId });
+  async getTranslate(dictionaryId: string, page: number, perPage: number) {
+    return this.translateRepo.getTranslate(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
   }
 
   async editTranslate(

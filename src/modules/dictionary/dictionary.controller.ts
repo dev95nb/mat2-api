@@ -1,4 +1,4 @@
-import { IRequest } from '$base/base.interface';
+import { IQueryPagination, IRequest } from '$base/base.interface';
 import { JwtAuthGuard } from '$guards/jwt.guard';
 import {
   Body,
@@ -44,9 +44,13 @@ export class DictionaryController {
   // Translate
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/translate')
-  async getTranslate(@Param() params: { dictionaryId: string }) {
+  async getTranslate(
+    @Param() params: { dictionaryId: string },
+    @Query() query: IQueryPagination,
+  ) {
     const dictionaryId = params.dictionaryId;
-    return this.dictionaryService.getTranslate(dictionaryId);
+    const { page, perPage } = query;
+    return this.dictionaryService.getTranslate(dictionaryId, page, perPage);
   }
 
   @UseGuards(JwtAuthGuard)
