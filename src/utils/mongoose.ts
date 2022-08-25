@@ -1,33 +1,37 @@
-export const aggregatePaginatePLugin = function (schema: any) {
-  schema.statics.aggregatePaginate = async function (query: any, options: any) {
-    const page = options.page || 1;
-    const limit = options.limit || 20;
-    const skip = (page - 1) * limit;
-    const sort = options.sort;
+import { IAggregateOption } from '$base/base.interface';
+import { Schema, Types } from 'mongoose';
+
+export const aggregatePaginatePLugin = function (schema: Schema) {
+  schema.statics.aggregatePaginate = async function (
+    query: any,
+    options: IAggregateOption,
+  ) {
+    const page = Number(options.page) || 1;
+    const perPage = Number(options.perPage) || 20;
+    const skip = (page - 1) * perPage;
     const allowDiskUse = options.allowDiskUse || false;
 
-    const q = this.aggregate(query._pipeline);
-    const data = this.aggregate().skip(skip).limit(limit);
-
-    if (sort) {
-      q.sort(sort);
-    }
+    const aggregate = this.aggregate(query._pipeline);
 
     if (allowDiskUse) {
-      q.allowDiskUse(true);
+      aggregate.allowDiskUse(true);
     }
 
-    const [{ items, count }] = await q.facet({
-      items: data._pipeline,
+    const [{ items, count }] = await aggregate.facet({
+      items: [{ $skip: skip }, { $limit: perPage }],
       count: [{ $count: 'count' }],
     });
 
     const totalCount = count[0] ? count[0].count : 0;
-    const totalPages = Math.ceil(totalCount / limit) || 1;
+    const pageCount = Math.ceil(totalCount / perPage) || 1;
     return {
       items,
       totalCount,
-      totalPages,
+      pageCount,
     };
   };
+};
+
+export const ObjectId = (field: string) => {
+  return new Types.ObjectId(field);
 };

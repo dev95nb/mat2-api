@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ObjectId } from '$utils/mongoose';
+import { Injectable } from '@nestjs/common';
 import {
   ClassRepository,
   DescriptionRepository,
@@ -75,8 +76,14 @@ export class DictionaryService {
   }
 
   // translate
-  async getTranslate(dictionaryId: string) {
-    return this.translateRepo.find({ dictionary: dictionaryId });
+  async getTranslate(dictionaryId: string, page: number, perPage: number) {
+    return this.translateRepo.getTranslate(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
   }
 
   async editTranslate(
@@ -116,46 +123,170 @@ export class DictionaryService {
   }
 
   // pronunciation
-  async getPronunciation(dictionaryId: string) {
-    return this.pronunciationRepo.find({ dictionary: dictionaryId });
+  async getPronunciation(dictionaryId: string, page: number, perPage: number) {
+    return this.pronunciationRepo.getPronunciation(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
   }
 
-  async editPronunciation(dictionaryId: string, data: IPronunciationCore) {}
+  async editPronunciation(
+    userId: string,
+    dictionaryId: string,
+    pronunciationId: string,
+    data: IPronunciationCore,
+  ) {
+    return this.pronunciationRepo.editPronunciation(
+      { dictionary: dictionaryId, pronunciationId, creator: userId },
+      data,
+    );
+  }
 
-  async addPronunciation(dictionaryId: string, data: IPronunciationCore) {}
+  async addPronunciation(
+    userId: string,
+    dictionaryId: string,
+    data: IPronunciationCore,
+  ) {
+    const obj = Object.assign(data, {
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+    return this.pronunciationRepo.addPronunciation(obj);
+  }
 
-  async deletePronunciation(dictionaryId: string, pronunciationId: string) {}
+  async deletePronunciation(
+    userId: string,
+    dictionaryId: string,
+    pronunciationId: string,
+  ) {
+    return this.pronunciationRepo.deletePronunciation({
+      _id: pronunciationId,
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+  }
 
   // class
-  async getClass(dictionaryId: string) {
-    return this.classRepo.find({ dictionary: dictionaryId });
+  async getClass(dictionaryId: string, page: number, perPage: number) {
+    return this.classRepo.getClass(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
   }
 
-  async editClass(dictionaryId: string, data: IClassCore) {}
+  async editClass(
+    userId: string,
+    dictionaryId: string,
+    classId: string,
+    data: IClassCore,
+  ) {
+    return this.classRepo.editClass(
+      { dictionary: dictionaryId, classId, creator: userId },
+      data,
+    );
+  }
 
-  async addClass(dictionaryId: string, data: IClassCore) {}
+  async addClass(userId: string, dictionaryId: string, data: IClassCore) {
+    const obj = Object.assign(data, {
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+    return this.classRepo.addClass(obj);
+  }
 
-  async deleteClass(dictionaryId: string, classId: string) {}
+  async deleteClass(userId: string, dictionaryId: string, classId: string) {
+    return this.classRepo.deleteClass({
+      _id: classId,
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+  }
 
   // Sentence
-  async getSentence(dictionaryId: string) {
-    return this.sentenceRepo.find({ dictionary: dictionaryId });
+  async getSentence(dictionaryId: string, page: number, perPage: number) {
+    return this.sentenceRepo.getSentence(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
   }
 
-  async editSentence(dictionaryId: string, data: ISentenceCore) {}
+  async editSentence(
+    userId: string,
+    dictionaryId: string,
+    sentenceId: string,
+    data: ISentenceCore,
+  ) {
+    return this.sentenceRepo.editSentence(
+      { dictionary: dictionaryId, sentenceId, creator: userId },
+      data,
+    );
+  }
 
-  async addSentence(dictionaryId: string, data: ISentenceCore) {}
+  async addSentence(userId: string, dictionaryId: string, data: ISentenceCore) {
+    const obj = Object.assign(data, {
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+    return this.sentenceRepo.addSentence(obj);
+  }
 
-  async deleteSentence(dictionaryId: string, sentenceId: string) {}
+  async deleteSentence(
+    userId: string,
+    dictionaryId: string,
+    sentenceId: string,
+  ) {
+    return this.sentenceRepo.deleteSentence({
+      _id: sentenceId,
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+  }
 
   // Note
-  async getNote(dictionaryId: string) {
-    return this.noteRepo.find({ dictionary: dictionaryId });
+  async getNote(dictionaryId: string, page: number, perPage: number) {
+    return this.noteRepo.getNote(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
   }
 
-  async editNote(dictionaryId: string, data: INoteCore) {}
+  async editNote(
+    userId: string,
+    dictionaryId: string,
+    noteId: string,
+    data: INoteCore,
+  ) {
+    return this.noteRepo.editNote(
+      { dictionary: dictionaryId, noteId, creator: userId },
+      data,
+    );
+  }
 
-  async addNote(dictionaryId: string, data: INoteCore) {}
+  async addNote(userId: string, dictionaryId: string, data: INoteCore) {
+    const obj = Object.assign(data, {
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+    return this.noteRepo.addNote(obj);
+  }
 
-  async deleteNote(dictionaryId: string, sentenceId: string) {}
+  async deleteNote(userId: string, dictionaryId: string, noteId: string) {
+    return this.noteRepo.deleteNote({
+      _id: noteId,
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+  }
 }

@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 
-const AuthSchema = {
-  name: 'auth',
+const SessionSchema = {
+  name: 'session',
   schema: new Schema(
     {
       userId: {
@@ -26,7 +26,7 @@ const AuthSchema = {
       },
       refreshToken: {
         type: String,
-        required: true,
+        required: false,
         unique: true,
       },
     },
@@ -36,4 +36,4 @@ const AuthSchema = {
   ),
 };
 
-export { AuthSchema };
+export { SessionSchema };

@@ -6,8 +6,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthSchema } from './schemas/auth.schema';
-import { AuthRepository } from './auth.repository';
+import { SessionSchema } from './schemas/auth.schema';
+import { SessionRepository } from './auth.repository';
 
 @Module({
   imports: [
@@ -17,10 +17,10 @@ import { AuthRepository } from './auth.repository';
       signOptions: { algorithm: 'RS256' },
     }),
     MongooseModule.forFeature([
-      { name: AuthSchema.name, schema: AuthSchema.schema },
+      { name: SessionSchema.name, schema: SessionSchema.schema },
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAtStrategy, JwtRtStrategy, AuthRepository],
+  providers: [AuthService, JwtAtStrategy, JwtRtStrategy, SessionRepository],
 })
 export class AuthModule {}
