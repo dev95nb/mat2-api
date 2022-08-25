@@ -20,8 +20,8 @@ export class BaseRepository<T extends Document> extends EventEmitter {
     return this.model.deleteOne(filter);
   }
 
-  async find(filter: any) {
-    return this.model.find(filter);
+  async find(filter: any, select?: string[]) {
+    return this.model.find(filter).select(select).lean();
   }
 
   async findOneById(id: string): Promise<T> {

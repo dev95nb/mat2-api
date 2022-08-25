@@ -1,4 +1,4 @@
-import { IsEnum, IsBoolean, IsOptional } from 'class-validator';
+import { IsEnum, IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class UserDto {
   name?: string;
@@ -13,13 +13,10 @@ export class UserEditDto {
 
   @IsEnum(['en', 'vi'])
   @IsOptional()
+  @IsString()
   language?: string;
 
-  @IsEnum(['dot', 'comma'])
   @IsOptional()
-  separator?: string;
-
-  @IsEnum(['left', 'right'])
-  @IsOptional()
-  currencyLocation?: string;
+  @IsString()
+  name?: string;
 }

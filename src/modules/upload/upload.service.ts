@@ -1,3 +1,4 @@
+import { B2 } from '$constants/common';
 import { ConfigAppService } from '$modules/config/config.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
@@ -26,9 +27,9 @@ export class UploadService {
     for (let i = 0; i < 5; i++) {
       try {
         const { data } = await axios.post(
-          'https://api004.backblazeb2.com/b2api/v2/b2_get_upload_url',
+          B2.API_UPLOAD,
           {
-            bucketId: '61a9c3d1bdc6f31c8713051b',
+            bucketId: process.env.B2_BUCKET,
           },
           {
             headers: {

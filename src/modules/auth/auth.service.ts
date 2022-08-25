@@ -31,7 +31,7 @@ export class AuthService {
     return {
       email: payload?.email,
       name: payload?.name,
-      picture: payload?.picture,
+      avatar: payload?.picture,
       openId: payload.sub,
     };
   }
@@ -87,6 +87,7 @@ export class AuthService {
         TEST: () => {
           return {
             openId: 'test',
+            name: 'Dung',
           };
         },
       };
@@ -100,9 +101,9 @@ export class AuthService {
       if (user) {
         userId = user.id;
       } else {
-        const user = await this.userService.createUser({
-          openId,
-        });
+        const user = await this.userService.createUser(
+          Object.assign(dataUser, { openId: [openId] }),
+        );
         userId = user.id;
       }
 
