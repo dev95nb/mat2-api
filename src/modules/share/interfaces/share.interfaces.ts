@@ -1,12 +1,18 @@
 export interface IShareCore {
   name?: string;
-  openId?: string[];
+  content?: string;
+  chatContent?: [
+    {
+      position: string;
+      name: string;
+      message: string;
+      messageType: string;
+    },
+  ];
   status?: string;
-  isDark?: boolean;
-  language?: string;
+  type?: string;
 }
 
 export interface IShare extends IShareCore {
-  userId?: string;
   _id?: string;
 }

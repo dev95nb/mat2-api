@@ -45,4 +45,8 @@ export class BaseRepository<T extends Document> extends EventEmitter {
   async updateOneById(id: string, data: any) {
     return this.model.findByIdAndUpdate(id, data);
   }
+
+  async updateOne(filter, data: any) {
+    return this.model.updateOne(filter, data);
+  }
 }

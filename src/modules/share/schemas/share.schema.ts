@@ -1,3 +1,4 @@
+import { aggregatePaginatePLugin } from '$utils/mongoose';
 import { Schema } from 'mongoose';
 
 const ShareSchema = {
@@ -39,11 +40,14 @@ const ShareSchema = {
         type: String,
         enum: ['CHAT', 'STORY'],
       },
+      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
     },
     {
       timestamps: true,
     },
   ),
 };
+
+ShareSchema.schema.plugin(aggregatePaginatePLugin);
 
 export { ShareSchema };

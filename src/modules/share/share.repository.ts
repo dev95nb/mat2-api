@@ -9,17 +9,19 @@ export class ShareRepository extends BaseRepository<IShareModel> {
     super(model);
   }
 
-  async getDetailMe(userId: string) {
-    return this.model
-      .findById(userId)
-      .select([
-        'name',
-        'email',
-        'status',
-        'isDark',
-        'language',
-        'notificationSetting',
-      ])
-      .lean();
+  async getListShare(
+    userId: string,
+    lang: string,
+    page: number,
+    perPage: number,
+  ) {
+    const query = this.model.aggregate([
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+    ]);
+    return this.model.aggregatePaginate(query, { page, perPage });
   }
 }
