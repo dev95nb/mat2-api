@@ -43,8 +43,10 @@ export class DictionaryRepository extends BaseRepository<IDictionaryModel> {
     return this.model.findOne({ openId }).lean();
   }
 
-  async searchWord(word: string) {
-    return this.model.find({ word: { $regex: word, $options: 'i' } }).limit(20);
+  async searchWord(word: string, source: string, destination: string) {
+    return this.model
+      .find({ word: { $regex: word, $options: 'i' }, source, destination })
+      .limit(20);
   }
 }
 

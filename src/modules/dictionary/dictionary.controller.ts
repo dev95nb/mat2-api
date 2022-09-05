@@ -36,9 +36,11 @@ export class DictionaryController {
 
   @UseGuards(JwtAuthGuard)
   @Get('search')
-  async searchWord(@Query() query: { word: string }) {
-    const word = query.word;
-    return this.dictionaryService.searchWord(word);
+  async searchWord(
+    @Query() query: { word: string; source: string; destination: string },
+  ) {
+    const { word, source, destination } = query;
+    return this.dictionaryService.searchWord(word, source, destination);
   }
 
   // Translate

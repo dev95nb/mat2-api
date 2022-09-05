@@ -71,8 +71,8 @@ export class DictionaryService {
     };
   }
 
-  async searchWord(word: string) {
-    return this.dictionaryRepo.searchWord(word);
+  async searchWord(word: string, source: string, destination: string) {
+    return this.dictionaryRepo.searchWord(word, source, destination);
   }
 
   // translate
