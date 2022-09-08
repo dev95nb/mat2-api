@@ -1,6 +1,6 @@
 import { translateText } from '$utils/common';
 import { ObjectId } from '$utils/mongoose';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   ClassRepository,
   DescriptionRepository,
@@ -32,65 +32,60 @@ export class DictionaryService {
     private readonly noteRepo: NoteRepository,
   ) {}
 
-  async getDefineWord(
-    userId: string,
-    word: string,
-    source: string,
-    destination: string,
-  ) {
+  async getDefineWord(word: string, source: string) {
     const getWord = await this.dictionaryRepo.findOne({
       word,
       source,
-      destination,
     });
 
     if (!getWord) {
       const saveWord = await this.dictionaryRepo.createOne({
         word,
         source,
-        destination,
-      });
-      const textTran = await translateText(word, destination);
-      const save = await this.translateRepo.createOne({
-        dictionary: saveWord._id,
-        translateValue: textTran[0],
-        isVerify: true,
-        toLanguage: destination,
       });
       return {
-        word: {
-          _id: saveWord.id,
-          word,
-          source,
-          destination,
-          createdAt: saveWord.createdAt,
-          updatedAt: saveWord.updatedAt,
-        },
-        translate: [save],
-        description: [],
+        _id: saveWord.id,
+        word,
+        source,
       };
     }
-
-    const getTranslate = await this.translateRepo.find({
-      dictionary: getWord._id,
-    });
-
-    const getDescription = await this.descriptionRepo.find({
-      dictionary: getWord._id,
-    });
-    return {
-      word: getWord,
-      translate: getTranslate,
-      description: getDescription,
-    };
+    return getWord;
   }
 
-  async searchWord(word: string, source: string, destination: string) {
-    return this.dictionaryRepo.searchWord(word, source, destination);
+  async searchWord(word: string, source: string) {
+    return this.dictionaryRepo.searchWord(word, source);
   }
 
   // translate
-  async getTranslate(dictionaryId: string, page: number, perPage: number) {
+  async getTranslate(
+    dictionaryId: string,
+    destination: string,
+    page: number,
+    perPage: number,
+  ) {
+    const getTranslate = await this.translateRepo.find({
+      dictionary: dictionaryId,
+    });
+
+    if (getTranslate.length === 0) {
+      const getWord = await this.dictionaryRepo.findOneById(dictionaryId);
+      if (!getWord) {
+        throw new HttpException('WORD_NOT_FOUND', HttpStatus.BAD_REQUEST);
+      }
+      const textTran = await translateText(getWord.word, destination);
+      const saveTran = await this.translateRepo.createOne({
+        dictionary: getWord._id,
+        translateValue: textTran[0],
+        isVerify: true,
+        isAI: true,
+        toLanguage: destination,
+      });
+      return {
+        items: [saveTran],
+        totalCount: 1,
+        pageCount: 1,
+      };
+    }
     return this.translateRepo.getTranslate(
       {
         dictionary: ObjectId(dictionaryId),

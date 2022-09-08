@@ -1,7 +1,7 @@
 export interface IDictionaryCore {
   word?: string;
   source?: string;
-  destination?: string;
+  isAI?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -31,8 +31,8 @@ export interface ITranslate extends ITranslateCore {
 }
 
 export interface IDescriptionCore {
-  word?: string;
-  language?: string;
+  toLanguage?: string;
+  translateValue?: string;
 }
 
 export interface IDescription extends IDescriptionCore {
@@ -41,7 +41,8 @@ export interface IDescription extends IDescriptionCore {
 
 export interface IClassCore {
   className?: string;
-  description?: string;
+  toLanguage?: string;
+  translateValue?: string;
 }
 
 export interface IClass extends IClassCore {

@@ -27,27 +27,16 @@ export class DictionaryController {
 
   @UseGuards(JwtAuthGuard)
   @Get('define')
-  async getDefineWord(
-    @Req() req: IRequest,
-    @Query() query: { word: string; source: string; destination: string },
-  ) {
-    const { word, source, destination } = query;
-    const { userId } = req.user;
-    return this.dictionaryService.getDefineWord(
-      userId,
-      word,
-      source,
-      destination,
-    );
+  async getDefineWord(@Query() query: { word: string; source: string }) {
+    const { word, source } = query;
+    return this.dictionaryService.getDefineWord(word, source);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('search')
-  async searchWord(
-    @Query() query: { word: string; source: string; destination: string },
-  ) {
-    const { word, source, destination } = query;
-    return this.dictionaryService.searchWord(word, source, destination);
+  async searchWord(@Query() query: { word: string; source: string }) {
+    const { word, source } = query;
+    return this.dictionaryService.searchWord(word, source);
   }
 
   // Translate
@@ -55,11 +44,16 @@ export class DictionaryController {
   @Get(':dictionaryId/translate')
   async getTranslate(
     @Param() params: { dictionaryId: string },
-    @Query() query: IQueryPagination,
+    @Query() query: { destination: string; page: number; perPage: number },
   ) {
     const dictionaryId = params.dictionaryId;
-    const { page, perPage } = query;
-    return this.dictionaryService.getTranslate(dictionaryId, page, perPage);
+    const { page, perPage, destination } = query;
+    return this.dictionaryService.getTranslate(
+      dictionaryId,
+      destination,
+      page,
+      perPage,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

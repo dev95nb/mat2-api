@@ -14,9 +14,6 @@ const DictionarySchema = {
       source: {
         type: String,
       },
-      destination: {
-        type: String,
-      },
       creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
     },
     {
@@ -55,6 +52,7 @@ const TranslateSchema = {
         unique: true,
       },
       isVerify: { type: Boolean, default: false },
+      isAI: { type: Boolean, default: false },
       verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       dictionary: {
@@ -71,7 +69,10 @@ const DescriptionSchema = {
   name: 'Description',
   schema: new Schema(
     {
-      description: String,
+      translateValue: {
+        type: String,
+        unique: true,
+      },
       toLanguage: String,
       isVerify: Boolean,
       verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
@@ -91,7 +92,10 @@ const ClassSchema = {
   schema: new Schema(
     {
       className: String,
-      description: String,
+      translateValue: {
+        type: String,
+        unique: true,
+      },
       isVerify: Boolean,
       verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       example: {
