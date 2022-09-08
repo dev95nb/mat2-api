@@ -74,3 +74,11 @@ export interface INoteCore {
 export interface INote extends INoteCore {
   _id?: string;
 }
+
+export interface IDescriptionCore {
+  content?: string;
+}
+
+export interface IDescription extends IDescriptionCore {
+  _id?: string;
+}

@@ -54,7 +54,7 @@ const TranslateSchema = {
         type: String,
         unique: true,
       },
-      isVerify: Boolean,
+      isVerify: { type: Boolean, default: false },
       verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       dictionary: {

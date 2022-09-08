@@ -28,10 +28,17 @@ export class DictionaryController {
   @UseGuards(JwtAuthGuard)
   @Get('define')
   async getDefineWord(
+    @Req() req: IRequest,
     @Query() query: { word: string; source: string; destination: string },
   ) {
     const { word, source, destination } = query;
-    return this.dictionaryService.getDefineWord(word, source, destination);
+    const { userId } = req.user;
+    return this.dictionaryService.getDefineWord(
+      userId,
+      word,
+      source,
+      destination,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -260,6 +267,62 @@ export class DictionaryController {
       userId,
       dictionaryId,
       sentenceId,
+    );
+  }
+
+  // Description
+  @UseGuards(JwtAuthGuard)
+  @Get(':dictionaryId/description')
+  async getDescription(
+    @Param() params: { dictionaryId: string },
+    @Query() query: IQueryPagination,
+  ) {
+    const dictionaryId = params.dictionaryId;
+    const { page, perPage } = query;
+    return this.dictionaryService.getDescription(dictionaryId, page, perPage);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':dictionaryId/description/:descriptionId')
+  async editDescription(
+    @Param() params: { dictionaryId: string; descriptionId: string },
+    @Body() body: NoteDto,
+    @Req() req: IRequest,
+  ) {
+    const { dictionaryId, descriptionId } = params;
+    const { userId } = req.user;
+    return this.dictionaryService.editDescription(
+      userId,
+      dictionaryId,
+      descriptionId,
+      body,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':dictionaryId/description')
+  async addDescription(
+    @Param() params: { dictionaryId: string },
+    @Body() body: NoteDto,
+    @Req() req: IRequest,
+  ) {
+    const dictionaryId = params.dictionaryId;
+    const { userId } = req.user;
+    return this.dictionaryService.addDescription(userId, dictionaryId, body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':dictionaryId/note/:descriptionId')
+  async deleteDescription(
+    @Param() params: { dictionaryId: string; descriptionId: string },
+    @Req() req: IRequest,
+  ) {
+    const { dictionaryId, descriptionId } = params;
+    const { userId } = req.user;
+    return this.dictionaryService.deleteDescription(
+      userId,
+      dictionaryId,
+      descriptionId,
     );
   }
 

@@ -1,3 +1,4 @@
+import { translateText } from '$utils/common';
 import { ObjectId } from '$utils/mongoose';
 import { Injectable } from '@nestjs/common';
 import {
@@ -12,6 +13,7 @@ import {
 } from './dictionary.repository';
 import {
   IClassCore,
+  IDescriptionCore,
   INoteCore,
   IPronunciationCore,
   ISentenceCore,
@@ -30,7 +32,12 @@ export class DictionaryService {
     private readonly noteRepo: NoteRepository,
   ) {}
 
-  async getDefineWord(word: string, source: string, destination: string) {
+  async getDefineWord(
+    userId: string,
+    word: string,
+    source: string,
+    destination: string,
+  ) {
     const getWord = await this.dictionaryRepo.findOne({
       word,
       source,
@@ -43,6 +50,13 @@ export class DictionaryService {
         source,
         destination,
       });
+      const textTran = await translateText(word, destination);
+      const save = await this.translateRepo.createOne({
+        dictionary: saveWord._id,
+        translateValue: textTran[0],
+        isVerify: true,
+        toLanguage: destination,
+      });
       return {
         word: {
           _id: saveWord.id,
@@ -52,7 +66,7 @@ export class DictionaryService {
           createdAt: saveWord.createdAt,
           updatedAt: saveWord.updatedAt,
         },
-        translate: [],
+        translate: [save],
         description: [],
       };
     }
@@ -246,6 +260,53 @@ export class DictionaryService {
   ) {
     return this.sentenceRepo.deleteSentence({
       _id: sentenceId,
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+  }
+
+  // Description
+  async getDescription(dictionaryId: string, page: number, perPage: number) {
+    return this.descriptionRepo.getDescription(
+      {
+        dictionary: ObjectId(dictionaryId),
+      },
+      page,
+      perPage,
+    );
+  }
+
+  async editDescription(
+    userId: string,
+    dictionaryId: string,
+    noteId: string,
+    data: IDescriptionCore,
+  ) {
+    return this.descriptionRepo.editDescription(
+      { dictionary: dictionaryId, noteId, creator: userId },
+      data,
+    );
+  }
+
+  async addDescription(
+    userId: string,
+    dictionaryId: string,
+    data: IDescriptionCore,
+  ) {
+    const obj = Object.assign(data, {
+      dictionary: dictionaryId,
+      creator: userId,
+    });
+    return this.descriptionRepo.addDescription(obj);
+  }
+
+  async deleteDescription(
+    userId: string,
+    dictionaryId: string,
+    noteId: string,
+  ) {
+    return this.descriptionRepo.deleteDescription({
+      _id: noteId,
       dictionary: dictionaryId,
       creator: userId,
     });
