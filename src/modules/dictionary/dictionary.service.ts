@@ -89,6 +89,7 @@ export class DictionaryService {
     return this.translateRepo.getTranslate(
       {
         dictionary: ObjectId(dictionaryId),
+        toLanguage: destination,
       },
       page,
       perPage,
@@ -132,10 +133,16 @@ export class DictionaryService {
   }
 
   // pronunciation
-  async getPronunciation(dictionaryId: string, page: number, perPage: number) {
+  async getPronunciation(
+    dictionaryId: string,
+    source: string,
+    page: number,
+    perPage: number,
+  ) {
     return this.pronunciationRepo.getPronunciation(
       {
         dictionary: ObjectId(dictionaryId),
+        source,
       },
       page,
       perPage,
@@ -261,10 +268,16 @@ export class DictionaryService {
   }
 
   // Description
-  async getDescription(dictionaryId: string, page: number, perPage: number) {
+  async getDescription(
+    dictionaryId: string,
+    destination: string,
+    page: number,
+    perPage: number,
+  ) {
     return this.descriptionRepo.getDescription(
       {
         dictionary: ObjectId(dictionaryId),
+        toLanguage: destination,
       },
       page,
       perPage,

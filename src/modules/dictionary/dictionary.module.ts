@@ -22,6 +22,12 @@ import {
   TranslateRepository,
   VideoRepository,
 } from './dictionary.repository';
+import { ClassController } from './controllers/class.controller';
+import { DescriptionController } from './controllers/description.controller';
+import { NoteController } from './controllers/note.controller';
+import { PronunciationController } from './controllers/pronunciation.controller';
+import { SentenceController } from './controllers/sentence.controller';
+import { TranslateController } from './controllers/translate.controller';
 
 @Module({
   imports: [
@@ -36,7 +42,15 @@ import {
       { name: NoteSchema.name, schema: NoteSchema.schema },
     ]),
   ],
-  controllers: [DictionaryController],
+  controllers: [
+    DictionaryController,
+    ClassController,
+    DescriptionController,
+    NoteController,
+    PronunciationController,
+    SentenceController,
+    TranslateController,
+  ],
   providers: [
     DictionaryService,
     DictionaryRepository,

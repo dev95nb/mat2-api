@@ -23,6 +23,10 @@ export class PronunciationDto {
   @MaxLength(50)
   audio?: string;
 
+  @IsString()
+  @MaxLength(50)
+  source?: string;
+
   @IsBoolean()
   isVerify?: boolean;
 }
@@ -35,6 +39,10 @@ export class ClassDto {
   @IsString()
   @MaxLength(100)
   description?: string;
+
+  @IsString()
+  @MaxLength(50)
+  toLanguage?: string;
 }
 
 export class DescriptionDto {

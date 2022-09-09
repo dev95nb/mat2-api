@@ -11,9 +11,7 @@ const DictionarySchema = {
         unique: true,
         index: true,
       },
-      source: {
-        type: String,
-      },
+      source: String,
       creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
     },
     {
@@ -30,6 +28,7 @@ const PronunciationSchema = {
       ipa: String,
       audio: String,
       isVerify: Boolean,
+      source: String,
       verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
       dictionary: {
@@ -92,6 +91,7 @@ const ClassSchema = {
   schema: new Schema(
     {
       className: String,
+      toLanguage: String,
       translateValue: {
         type: String,
         unique: true,
