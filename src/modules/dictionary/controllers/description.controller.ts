@@ -12,12 +12,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DictionaryService } from '../dictionary.service';
-import { NoteDto } from '../dto/dictionary.dto';
+import { DescriptionDto } from '../dto/dictionary.dto';
+import { DescriptionService } from '../services/description.service';
 
 @Controller('dictionary')
 export class DescriptionController {
-  constructor(private dictionaryService: DictionaryService) {}
+  constructor(private descriptionService: DescriptionService) {}
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/description')
   async getDescription(
@@ -26,7 +26,7 @@ export class DescriptionController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { destination, page, perPage } = query;
-    return this.dictionaryService.getDescription(
+    return this.descriptionService.getDescription(
       dictionaryId,
       destination,
       page,
@@ -38,12 +38,12 @@ export class DescriptionController {
   @Put(':dictionaryId/description/:descriptionId')
   async editDescription(
     @Param() params: { dictionaryId: string; descriptionId: string },
-    @Body() body: NoteDto,
+    @Body() body: DescriptionDto,
     @Req() req: IRequest,
   ) {
     const { dictionaryId, descriptionId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.editDescription(
+    return this.descriptionService.editDescription(
       userId,
       dictionaryId,
       descriptionId,
@@ -55,12 +55,12 @@ export class DescriptionController {
   @Post(':dictionaryId/description')
   async addDescription(
     @Param() params: { dictionaryId: string },
-    @Body() body: NoteDto,
+    @Body() body: DescriptionDto,
     @Req() req: IRequest,
   ) {
     const dictionaryId = params.dictionaryId;
     const { userId } = req.user;
-    return this.dictionaryService.addDescription(userId, dictionaryId, body);
+    return this.descriptionService.addDescription(userId, dictionaryId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -71,7 +71,7 @@ export class DescriptionController {
   ) {
     const { dictionaryId, descriptionId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.deleteDescription(
+    return this.descriptionService.deleteDescription(
       userId,
       dictionaryId,
       descriptionId,

@@ -28,6 +28,12 @@ import { NoteController } from './controllers/note.controller';
 import { PronunciationController } from './controllers/pronunciation.controller';
 import { SentenceController } from './controllers/sentence.controller';
 import { TranslateController } from './controllers/translate.controller';
+import { ClassService } from './services/class.service';
+import { DescriptionService } from './services/description.service';
+import { NoteService } from './services/note.service';
+import { PronunciationService } from './services/pronunciation.service';
+import { SentenceService } from './services/sentence.service';
+import { TranslateService } from './services/translate.service';
 
 @Module({
   imports: [
@@ -53,6 +59,12 @@ import { TranslateController } from './controllers/translate.controller';
   ],
   providers: [
     DictionaryService,
+    ClassService,
+    DescriptionService,
+    NoteService,
+    PronunciationService,
+    SentenceService,
+    TranslateService,
     DictionaryRepository,
     PronunciationRepository,
     TranslateRepository,

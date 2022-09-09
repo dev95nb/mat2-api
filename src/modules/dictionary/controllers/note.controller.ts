@@ -12,12 +12,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DictionaryService } from '../dictionary.service';
 import { NoteDto } from '../dto/dictionary.dto';
+import { NoteService } from '../services/note.service';
 
 @Controller('dictionary')
 export class NoteController {
-  constructor(private dictionaryService: DictionaryService) {}
+  constructor(private noteService: NoteService) {}
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/note')
   async getNote(
@@ -26,7 +26,7 @@ export class NoteController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { page, perPage } = query;
-    return this.dictionaryService.getNote(dictionaryId, page, perPage);
+    return this.noteService.getNote(dictionaryId, page, perPage);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,7 +38,7 @@ export class NoteController {
   ) {
     const { dictionaryId, noteId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.editNote(userId, dictionaryId, noteId, body);
+    return this.noteService.editNote(userId, dictionaryId, noteId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -50,7 +50,7 @@ export class NoteController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { userId } = req.user;
-    return this.dictionaryService.addNote(userId, dictionaryId, body);
+    return this.noteService.addNote(userId, dictionaryId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -61,6 +61,6 @@ export class NoteController {
   ) {
     const { dictionaryId, noteId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.deleteNote(userId, dictionaryId, noteId);
+    return this.noteService.deleteNote(userId, dictionaryId, noteId);
   }
 }

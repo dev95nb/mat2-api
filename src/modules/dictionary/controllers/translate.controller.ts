@@ -12,13 +12,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DictionaryService } from '../dictionary.service';
 
 import { TranslateDto } from '../dto/dictionary.dto';
+import { TranslateService } from '../services/translate.service';
 
 @Controller('dictionary')
 export class TranslateController {
-  constructor(private dictionaryService: DictionaryService) {}
+  constructor(private translateService: TranslateService) {}
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/translate')
   async getTranslate(
@@ -27,7 +27,7 @@ export class TranslateController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { page, perPage, destination } = query;
-    return this.dictionaryService.getTranslate(
+    return this.translateService.getTranslate(
       dictionaryId,
       destination,
       page,
@@ -44,7 +44,7 @@ export class TranslateController {
   ) {
     const { dictionaryId, translateId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.editTranslate(
+    return this.translateService.editTranslate(
       userId,
       dictionaryId,
       translateId,
@@ -61,7 +61,7 @@ export class TranslateController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { userId } = req.user;
-    return this.dictionaryService.addTranslate(userId, dictionaryId, body);
+    return this.translateService.addTranslate(userId, dictionaryId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -72,7 +72,7 @@ export class TranslateController {
   ) {
     const { dictionaryId, translateId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.deleteTranslate(
+    return this.translateService.deleteTranslate(
       userId,
       dictionaryId,
       translateId,

@@ -12,12 +12,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DictionaryService } from '../dictionary.service';
 import { ClassDto } from '../dto/dictionary.dto';
+import { ClassService } from '../services/class.service';
 
 @Controller('dictionary')
 export class ClassController {
-  constructor(private dictionaryService: DictionaryService) {}
+  constructor(private classService: ClassService) {}
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/class')
   async getClass(
@@ -26,7 +26,7 @@ export class ClassController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { page, perPage } = query;
-    return this.dictionaryService.getClass(dictionaryId, page, perPage);
+    return this.classService.getClass(dictionaryId, page, perPage);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,12 +38,7 @@ export class ClassController {
   ) {
     const { dictionaryId, classId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.editClass(
-      userId,
-      dictionaryId,
-      classId,
-      body,
-    );
+    return this.classService.editClass(userId, dictionaryId, classId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -55,7 +50,7 @@ export class ClassController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { userId } = req.user;
-    return this.dictionaryService.addClass(userId, dictionaryId, body);
+    return this.classService.addClass(userId, dictionaryId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -66,6 +61,6 @@ export class ClassController {
   ) {
     const { dictionaryId, classId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.deleteClass(userId, dictionaryId, classId);
+    return this.classService.deleteClass(userId, dictionaryId, classId);
   }
 }

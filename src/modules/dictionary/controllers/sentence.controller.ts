@@ -12,12 +12,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DictionaryService } from '../dictionary.service';
 import { SentenceDto } from '../dto/dictionary.dto';
+import { SentenceService } from '../services/sentence.service';
 
 @Controller('dictionary')
 export class SentenceController {
-  constructor(private dictionaryService: DictionaryService) {}
+  constructor(private sentenceService: SentenceService) {}
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/sentence')
   async getSentence(
@@ -26,7 +26,7 @@ export class SentenceController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { page, perPage } = query;
-    return this.dictionaryService.getSentence(dictionaryId, page, perPage);
+    return this.sentenceService.getSentence(dictionaryId, page, perPage);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,7 +38,7 @@ export class SentenceController {
   ) {
     const { dictionaryId, sentenceId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.editSentence(
+    return this.sentenceService.editSentence(
       userId,
       dictionaryId,
       sentenceId,
@@ -55,7 +55,7 @@ export class SentenceController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { userId } = req.user;
-    return this.dictionaryService.addSentence(userId, dictionaryId, body);
+    return this.sentenceService.addSentence(userId, dictionaryId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -66,7 +66,7 @@ export class SentenceController {
   ) {
     const { dictionaryId, sentenceId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.deleteSentence(
+    return this.sentenceService.deleteSentence(
       userId,
       dictionaryId,
       sentenceId,

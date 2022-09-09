@@ -12,12 +12,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DictionaryService } from '../dictionary.service';
 import { PronunciationDto } from '../dto/dictionary.dto';
+import { PronunciationService } from '../services/pronunciation.service';
 
 @Controller('dictionary')
 export class PronunciationController {
-  constructor(private dictionaryService: DictionaryService) {}
+  constructor(private pronunciationService: PronunciationService) {}
   @UseGuards(JwtAuthGuard)
   @Get(':dictionaryId/pronunciation')
   async getPronunciation(
@@ -26,7 +26,7 @@ export class PronunciationController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { page, perPage, source } = query;
-    return this.dictionaryService.getPronunciation(
+    return this.pronunciationService.getPronunciation(
       dictionaryId,
       source,
       page,
@@ -43,7 +43,7 @@ export class PronunciationController {
   ) {
     const { dictionaryId, pronunciationId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.editPronunciation(
+    return this.pronunciationService.editPronunciation(
       userId,
       dictionaryId,
       pronunciationId,
@@ -60,7 +60,11 @@ export class PronunciationController {
   ) {
     const dictionaryId = params.dictionaryId;
     const { userId } = req.user;
-    return this.dictionaryService.addPronunciation(userId, dictionaryId, body);
+    return this.pronunciationService.addPronunciation(
+      userId,
+      dictionaryId,
+      body,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -71,7 +75,7 @@ export class PronunciationController {
   ) {
     const { dictionaryId, pronunciationId } = params;
     const { userId } = req.user;
-    return this.dictionaryService.deletePronunciation(
+    return this.pronunciationService.deletePronunciation(
       userId,
       dictionaryId,
       pronunciationId,
