@@ -1,9 +1,9 @@
 import { IAggregateOption } from '$base/base.interface';
-import { Schema, Types } from 'mongoose';
+import { Aggregate, Schema, Types } from 'mongoose';
 
 export const aggregatePaginatePLugin = function (schema: Schema) {
   schema.statics.aggregatePaginate = async function (
-    query: any,
+    query: Aggregate<Array<any>>,
     options: IAggregateOption,
   ) {
     const page = Number(options.page) || 1;
@@ -11,7 +11,7 @@ export const aggregatePaginatePLugin = function (schema: Schema) {
     const skip = (page - 1) * perPage;
     const allowDiskUse = options.allowDiskUse || false;
 
-    const aggregate = this.aggregate(query._pipeline);
+    const aggregate = this.aggregate(query.pipeline());
 
     if (allowDiskUse) {
       aggregate.allowDiskUse(true);
