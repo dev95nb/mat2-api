@@ -1,138 +1,133 @@
-import { Schema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 
-const NotificationSettingSchema = {
-  name: 'NotificationSetting',
-  schema: new Schema(
-    {
-      en: {
-        name: {
-          type: String,
-          trim: true,
-        },
-      },
-      status: {
-        type: String,
-        enum: ['ACTIVE', 'INACTIVE'],
-        default: 'ACTIVE',
-      },
-      value: {
-        type: Boolean,
-      },
-    },
-    {
-      timestamps: true,
-    },
-  ),
-};
+@Schema()
+export class _Content {
+  @Prop()
+  lang: string;
 
-const UserSchema = {
-  name: 'User',
-  schema: new Schema(
-    {
-      name: {
-        type: String,
-        trim: true,
-      },
-      status: {
-        type: String,
-        enum: ['ACTIVE', 'INACTIVE', 'BLOCKED'],
-        default: 'ACTIVE',
-      },
-      openId: {
-        type: Array,
-      },
-      isDark: {
-        type: Boolean,
-        required: false,
-      },
-      language: {
-        type: String,
-        enum: ['vi', 'en'],
-      },
-      notificationSetting: [
-        {
-          notificationSettingId: String,
-          value: Boolean,
-        },
-      ],
-    },
-    {
-      timestamps: true,
-    },
-  ),
-};
+  @Prop()
+  title: string;
+}
 
-const NotificationTemplateSchema = {
-  name: 'NotificationTemplate',
-  schema: new Schema(
-    {
-      en: {
-        name: {
-          type: String,
-          trim: true,
-        },
-        content: {
-          type: String,
-          trim: true,
-        },
-      },
-    },
-    {
-      timestamps: true,
-    },
-  ),
-};
+const _ContentSchema = SchemaFactory.createForClass(_Content);
 
-const NotificationSchema = {
-  name: 'Notification',
-  schema: new Schema(
-    {
-      notificationTemplate: {
-        type: Schema.Types.ObjectId,
-        ref: 'NotificationTemplate',
-        index: true,
-      },
-      nameValue: [
-        {
-          key: {
-            type: String,
-          },
-          value: {
-            type: String,
-          },
-        },
-      ],
-      contentValue: [
-        {
-          key: {
-            type: String,
-          },
-          value: {
-            type: String,
-          },
-        },
-      ],
-      status: {
-        type: String,
-        enum: ['READ', 'UNREAD'],
-        default: 'UNREAD',
-      },
-      type: {
-        type: String,
-        enum: ['USER', 'GLOBAL'],
-        default: 'USER',
-      },
-      user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-    },
-    {
-      timestamps: true,
-    },
-  ),
-};
+export type NotificationSettingSchema = NotificationSetting & Document;
 
-export {
-  UserSchema,
-  NotificationSchema,
-  NotificationSettingSchema,
-  NotificationTemplateSchema,
-};
+@Schema({ timestamps: true })
+export class NotificationSetting {
+  @Prop({ type: [_ContentSchema] })
+  text: _Content[];
+
+  @Prop({ enum: ['ACTIVE', 'INACTIVE'], default: 'ACTIVE' })
+  status: string;
+
+  @Prop()
+  value: boolean;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+}
+
+export const NotificationSettingSchema =
+  SchemaFactory.createForClass(NotificationSetting);
+
+export type UserSchema = User & Document;
+
+@Schema()
+export class _NotificationSetting {
+  @Prop()
+  notificationSettingId: string;
+
+  @Prop()
+  value: boolean;
+}
+
+const _NotificationSettingSchema =
+  SchemaFactory.createForClass(_NotificationSetting);
+@Schema({ timestamps: true })
+export class User {
+  @Prop({ trim: true })
+  name: string;
+
+  @Prop({ enum: ['ACTIVE', 'INACTIVE', 'BLOCKED'], default: 'ACTIVE' })
+  status: string;
+
+  @Prop()
+  openId: string[];
+
+  @Prop({ default: false })
+  isDark: boolean;
+
+  @Prop({ enum: ['vi', 'en'] })
+  language: string;
+
+  @Prop({ type: [_NotificationSettingSchema] })
+  notificationSetting: _NotificationSetting[];
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
+
+@Schema()
+export class _ContentNotificationTemplate {
+  @Prop()
+  lang: string;
+
+  @Prop()
+  name: string;
+
+  @Prop()
+  content: string;
+}
+
+const _ContentNotificationTemplateSchema = SchemaFactory.createForClass(
+  _ContentNotificationTemplate,
+);
+
+export type NotificationTemplateSchema = NotificationTemplate & Document;
+
+@Schema({ timestamps: true })
+export class NotificationTemplate {
+  @Prop({ type: [_ContentNotificationTemplateSchema] })
+  text: _ContentNotificationTemplate[];
+}
+
+export const NotificationTemplateSchema =
+  SchemaFactory.createForClass(NotificationTemplate);
+
+@Schema()
+export class _ValueNotification {
+  @Prop()
+  key: string;
+
+  @Prop()
+  value: string;
+}
+
+const _ValueNotificationSchema =
+  SchemaFactory.createForClass(_ValueNotification);
+
+export type NotificationSchema = Notification & Document;
+
+@Schema({ timestamps: true })
+export class Notification {
+  @Prop({ type: [_ValueNotificationSchema] })
+  title: _ValueNotification[];
+
+  @Prop({ type: [_ValueNotificationSchema] })
+  content: _ValueNotification[];
+
+  @Prop({ enum: ['READ', 'UNREAD'] })
+  status: string;
+
+  @Prop({ enum: ['USER', 'GLOBAL'] })
+  type: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  user: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'NotificationTemplate' })
+  notificationTemplate: string;
+}
+
+export const NotificationSchema = SchemaFactory.createForClass(Notification);

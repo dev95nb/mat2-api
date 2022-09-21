@@ -1,184 +1,162 @@
-import { aggregatePaginatePLugin } from '$utils/mongoose';
-import { Schema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 
-const DictionarySchema = {
-  name: 'Dictionary',
-  schema: new Schema(
-    {
-      word: {
-        type: String,
-        required: true,
-        unique: true,
-        index: true,
-      },
-      source: String,
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-    },
-    {
-      timestamps: true,
-    },
-  ),
-};
+export type DictionarySchema = Dictionary & Document;
 
-const PronunciationSchema = {
-  name: 'Pronunciation',
-  schema: new Schema(
-    {
-      speakStyle: String,
-      ipa: String,
-      audio: String,
-      isVerify: Boolean,
-      source: String,
-      verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      dictionary: {
-        type: Schema.Types.ObjectId,
-        ref: 'Dictionary',
-        index: true,
-      },
-    },
-    { timestamps: true },
-  ),
-};
+@Schema({ timestamps: true })
+export class Dictionary {
+  @Prop({ required: true, unique: true, index: true })
+  word: string;
 
-const TranslateSchema = {
-  name: 'Translate',
-  schema: new Schema(
-    {
-      toLanguage: String,
-      translateValue: {
-        type: String,
-        unique: true,
-      },
-      isVerify: { type: Boolean, default: false },
-      isAI: { type: Boolean, default: false },
-      verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      dictionary: {
-        type: Schema.Types.ObjectId,
-        ref: 'Dictionary',
-        index: true,
-      },
-    },
-    { timestamps: true },
-  ),
-};
+  @Prop({ required: true })
+  source: string;
 
-const DescriptionSchema = {
-  name: 'Description',
-  schema: new Schema(
-    {
-      translateValue: {
-        type: String,
-        unique: true,
-      },
-      toLanguage: String,
-      isVerify: Boolean,
-      verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      dictionary: {
-        type: Schema.Types.ObjectId,
-        ref: 'Dictionary',
-        index: true,
-      },
-    },
-    { timestamps: true },
-  ),
-};
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+}
 
-const ClassSchema = {
-  name: 'Class',
-  schema: new Schema(
-    {
-      className: String,
-      toLanguage: String,
-      translateValue: {
-        type: String,
-        unique: true,
-      },
-      isVerify: Boolean,
-      verifyBy: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      example: {
-        original: String,
-        translateValue: String,
-        toLanguage: String,
-      },
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      dictionary: {
-        type: Schema.Types.ObjectId,
-        ref: 'Dictionary',
-        index: true,
-      },
-    },
-    { timestamps: true },
-  ),
-};
+export const DictionarySchema = SchemaFactory.createForClass(Dictionary);
 
-const VideoSchema = {
-  name: 'Video',
-  schema: new Schema(
-    {
-      videoId: {
-        type: String,
-        index: true,
-      },
-      typeVideo: {
-        type: String,
-      },
-      dictionary: { type: Schema.Types.ObjectId, ref: 'Dictionary' },
-    },
-    { timestamps: true },
-  ),
-};
+export type PronunciationSchema = Dictionary & Document;
+@Schema({ timestamps: true })
+export class Pronunciation {
+  @Prop()
+  speakStyle: string;
 
-const SentenceSchema = {
-  name: 'Sentence',
-  schema: new Schema(
-    {
-      original: String,
-      translateValue: String,
-      toLanguage: String,
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      dictionary: {
-        type: Schema.Types.ObjectId,
-        ref: 'Dictionary',
-        index: true,
-      },
-    },
-    { timestamps: true },
-  ),
-};
+  @Prop()
+  ipa: string;
 
-const NoteSchema = {
-  name: 'Note',
-  schema: new Schema(
-    {
-      content: String,
-      creator: { type: Schema.Types.ObjectId, ref: 'User', index: true },
-      dictionary: {
-        type: Schema.Types.ObjectId,
-        ref: 'Dictionary',
-        index: true,
-      },
-    },
-    { timestamps: true },
-  ),
-};
+  @Prop()
+  audio: string;
 
-TranslateSchema.schema.plugin(aggregatePaginatePLugin);
-DescriptionSchema.schema.plugin(aggregatePaginatePLugin);
-PronunciationSchema.schema.plugin(aggregatePaginatePLugin);
-ClassSchema.schema.plugin(aggregatePaginatePLugin);
-SentenceSchema.schema.plugin(aggregatePaginatePLugin);
-NoteSchema.schema.plugin(aggregatePaginatePLugin);
+  @Prop()
+  isVerify: boolean;
 
-export {
-  DictionarySchema,
-  PronunciationSchema,
-  TranslateSchema,
-  DescriptionSchema,
-  ClassSchema,
-  VideoSchema,
-  SentenceSchema,
-  NoteSchema,
-};
+  @Prop()
+  source: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  verifyBy: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dictionary' })
+  dictionary: string;
+}
+
+export const PronunciationSchema = SchemaFactory.createForClass(Pronunciation);
+
+export type TranslateSchema = Translate & Document;
+@Schema({ timestamps: true })
+export class Translate {
+  @Prop()
+  toLanguage: string;
+
+  @Prop({ unique: true })
+  translateValue: string;
+
+  @Prop()
+  isVerify: boolean;
+
+  @Prop()
+  isAI: boolean;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  verifyBy: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dictionary' })
+  dictionary: string;
+}
+
+export const TranslateSchema = SchemaFactory.createForClass(Translate);
+
+export type DescriptionSchema = Description & Document;
+@Schema({ timestamps: true })
+export class Description {
+  @Prop({ unique: true })
+  translateValue: string;
+
+  @Prop()
+  toLanguage: string;
+
+  @Prop()
+  isVerify: boolean;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  verifyBy: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dictionary' })
+  dictionary: string;
+}
+
+export const DescriptionSchema = SchemaFactory.createForClass(Description);
+
+export type ClassSchema = Description & Document;
+@Schema({ timestamps: true })
+export class Class {
+  @Prop()
+  className: string;
+
+  @Prop()
+  toLanguage: string;
+
+  @Prop({ unique: true })
+  translateValue: string;
+
+  @Prop()
+  isVerify: boolean;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  verifyBy: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dictionary' })
+  dictionary: string;
+}
+
+export const ClassSchema = SchemaFactory.createForClass(Class);
+
+export type SentenceSchema = Description & Document;
+@Schema({ timestamps: true })
+export class Sentence {
+  @Prop()
+  original: string;
+
+  @Prop()
+  toLanguage: string;
+
+  @Prop({ unique: true })
+  translateValue: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dictionary' })
+  dictionary: string;
+}
+
+export const SentenceSchema = SchemaFactory.createForClass(Sentence);
+
+export type NoteSchema = Description & Document;
+@Schema({ timestamps: true })
+export class Note {
+  @Prop()
+  content: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creator: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dictionary' })
+  dictionary: string;
+}
+
+export const NoteSchema = SchemaFactory.createForClass(Note);

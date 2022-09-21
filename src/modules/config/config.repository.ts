@@ -2,11 +2,11 @@ import { IConfigModel } from './config.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseRepository } from '../../base/base.repository';
-import { ConfigAppSchema } from './schemas/config.schema';
+import { ConfigApp } from './schemas/config.schema';
 
 @Injectable()
 export class ConfigAppRepository extends BaseRepository<IConfigModel> {
-  constructor(@InjectModel(ConfigAppSchema.name) model) {
+  constructor(@InjectModel(ConfigApp.name) model) {
     super(model);
   }
 

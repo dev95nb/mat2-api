@@ -6,14 +6,10 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseRepository } from '../../base/base.repository';
-import {
-  UserSchema,
-  NotificationSettingSchema,
-  NotificationSchema,
-} from './schemas/user.schema';
+import { Notification, User, NotificationSetting } from './schemas/user.schema';
 @Injectable()
 export class UserRepository extends BaseRepository<IUserModel> {
-  constructor(@InjectModel(UserSchema.name) model) {
+  constructor(@InjectModel(User.name) model) {
     super(model);
   }
 
@@ -45,14 +41,14 @@ export class UserRepository extends BaseRepository<IUserModel> {
 
 @Injectable()
 export class NotificationSettingRepository extends BaseRepository<INotificationSettingModel> {
-  constructor(@InjectModel(NotificationSettingSchema.name) model) {
+  constructor(@InjectModel(NotificationSetting.name) model) {
     super(model);
   }
 }
 
 @Injectable()
 export class NotificationRepository extends BaseRepository<INotificationModel> {
-  constructor(@InjectModel(NotificationSchema.name) model) {
+  constructor(@InjectModel(Notification.name) model) {
     super(model);
   }
 

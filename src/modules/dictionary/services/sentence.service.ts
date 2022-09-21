@@ -1,7 +1,7 @@
 import { ObjectId } from '$utils/mongoose';
 import { Injectable } from '@nestjs/common';
-import { SentenceRepository } from '../dictionary.repository';
 import { ISentenceCore } from '../interfaces/dictionary.interfaces';
+import { SentenceRepository } from '../repository';
 @Injectable()
 export class SentenceService {
   constructor(private readonly sentenceRepo: SentenceRepository) {}

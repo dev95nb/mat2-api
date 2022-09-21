@@ -2,50 +2,109 @@ import { Module } from '@nestjs/common';
 import { DictionaryService } from './dictionary.service';
 import { DictionaryController } from './dictionary.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { aggregatePaginatePLugin } from '$utils/mongoose';
+
 import {
+  Dictionary,
   DictionarySchema,
+  Pronunciation,
   PronunciationSchema,
+  Translate,
   TranslateSchema,
+  Description,
   DescriptionSchema,
+  Class,
   ClassSchema,
-  VideoSchema,
+  Sentence,
   SentenceSchema,
+  Note,
   NoteSchema,
 } from './schemas/dictionary.schema';
+import { DictionaryRepository } from './dictionary.repository';
+
 import {
   ClassRepository,
   DescriptionRepository,
-  DictionaryRepository,
   NoteRepository,
   PronunciationRepository,
   SentenceRepository,
   TranslateRepository,
-  VideoRepository,
-} from './dictionary.repository';
-import { ClassController } from './controllers/class.controller';
-import { DescriptionController } from './controllers/description.controller';
-import { NoteController } from './controllers/note.controller';
-import { PronunciationController } from './controllers/pronunciation.controller';
-import { SentenceController } from './controllers/sentence.controller';
-import { TranslateController } from './controllers/translate.controller';
-import { ClassService } from './services/class.service';
-import { DescriptionService } from './services/description.service';
-import { NoteService } from './services/note.service';
-import { PronunciationService } from './services/pronunciation.service';
-import { SentenceService } from './services/sentence.service';
-import { TranslateService } from './services/translate.service';
+} from './repository';
+import {
+  ClassService,
+  DescriptionService,
+  NoteService,
+  PronunciationService,
+  SentenceService,
+  TranslateService,
+} from './services';
+import {
+  ClassController,
+  DescriptionController,
+  NoteController,
+  PronunciationController,
+  SentenceController,
+  TranslateController,
+} from './controllers';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: DictionarySchema.name, schema: DictionarySchema.schema },
-      { name: PronunciationSchema.name, schema: PronunciationSchema.schema },
-      { name: TranslateSchema.name, schema: TranslateSchema.schema },
-      { name: DescriptionSchema.name, schema: DescriptionSchema.schema },
-      { name: ClassSchema.name, schema: ClassSchema.schema },
-      { name: VideoSchema.name, schema: VideoSchema.schema },
-      { name: SentenceSchema.name, schema: SentenceSchema.schema },
-      { name: NoteSchema.name, schema: NoteSchema.schema },
+    MongooseModule.forFeatureAsync([
+      {
+        name: Dictionary.name,
+        useFactory: () => {
+          const schema = DictionarySchema;
+          return schema;
+        },
+      },
+      {
+        name: Pronunciation.name,
+        useFactory: () => {
+          const schema = PronunciationSchema;
+          schema.plugin(aggregatePaginatePLugin);
+          return schema;
+        },
+      },
+      {
+        name: Translate.name,
+        useFactory: () => {
+          const schema = TranslateSchema;
+          schema.plugin(aggregatePaginatePLugin);
+          return schema;
+        },
+      },
+      {
+        name: Description.name,
+        useFactory: () => {
+          const schema = DescriptionSchema;
+          schema.plugin(aggregatePaginatePLugin);
+          return schema;
+        },
+      },
+      {
+        name: Class.name,
+        useFactory: () => {
+          const schema = ClassSchema;
+          schema.plugin(aggregatePaginatePLugin);
+          return schema;
+        },
+      },
+      {
+        name: Sentence.name,
+        useFactory: () => {
+          const schema = SentenceSchema;
+          schema.plugin(aggregatePaginatePLugin);
+          return schema;
+        },
+      },
+      {
+        name: Note.name,
+        useFactory: () => {
+          const schema = NoteSchema;
+          schema.plugin(aggregatePaginatePLugin);
+          return schema;
+        },
+      },
     ]),
   ],
   controllers: [
@@ -70,7 +129,6 @@ import { TranslateService } from './services/translate.service';
     TranslateRepository,
     DescriptionRepository,
     ClassRepository,
-    VideoRepository,
     SentenceRepository,
     NoteRepository,
   ],

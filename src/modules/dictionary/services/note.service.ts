@@ -1,7 +1,7 @@
 import { ObjectId } from '$utils/mongoose';
 import { Injectable } from '@nestjs/common';
-import { NoteRepository } from '../dictionary.repository';
 import { INoteCore } from '../interfaces/dictionary.interfaces';
+import { NoteRepository } from '../repository';
 @Injectable()
 export class NoteService {
   constructor(private readonly noteRepo: NoteRepository) {}

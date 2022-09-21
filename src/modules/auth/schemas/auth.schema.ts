@@ -1,39 +1,27 @@
-import { Schema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-const SessionSchema = {
-  name: 'session',
-  schema: new Schema(
-    {
-      userId: {
-        type: String,
-        required: true,
-      },
-      openId: {
-        type: String,
-        required: true,
-      },
-      method: {
-        type: String,
-        enum: ['GOOGLE', 'FACEBOOK', 'APPLE'],
-        required: true,
-      },
-      deviceId: {
-        type: String,
-      },
-      os: {
-        type: String,
-        enum: ['IOS', 'ANDROID'],
-      },
-      refreshToken: {
-        type: String,
-        required: false,
-        unique: true,
-      },
-    },
-    {
-      timestamps: true,
-    },
-  ),
-};
+export type SessionSchema = Session & Document;
 
-export { SessionSchema };
+@Schema({ timestamps: true })
+export class Session {
+  @Prop({ required: true })
+  userId: string;
+
+  @Prop({ required: true })
+  openId: string;
+
+  @Prop({ required: true, enum: ['GOOGLE', 'FACEBOOK', 'APPLE'] })
+  method: string;
+
+  @Prop({ required: true })
+  deviceId: string;
+
+  @Prop({ required: true, enum: ['IOS', 'ANDROID'] })
+  os: string;
+
+  @Prop({ unique: true })
+  refreshToken: string;
+}
+
+export const SessionSchema = SchemaFactory.createForClass(Session);

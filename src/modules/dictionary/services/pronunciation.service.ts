@@ -1,7 +1,7 @@
 import { ObjectId } from '$utils/mongoose';
 import { Injectable } from '@nestjs/common';
-import { PronunciationRepository } from '../dictionary.repository';
 import { IPronunciationCore } from '../interfaces/dictionary.interfaces';
+import { PronunciationRepository } from '../repository';
 @Injectable()
 export class PronunciationService {
   constructor(private readonly pronunciationRepo: PronunciationRepository) {}

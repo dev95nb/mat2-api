@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
+  User,
   UserSchema,
+  NotificationSetting,
   NotificationSettingSchema,
+  Notification,
   NotificationSchema,
+  NotificationTemplate,
   NotificationTemplateSchema,
 } from './schemas/user.schema';
 import { UserController } from './user.controller';
@@ -24,15 +28,15 @@ import { UserService } from './user.service';
   controllers: [UserController],
   imports: [
     MongooseModule.forFeature([
-      { name: UserSchema.name, schema: UserSchema.schema },
+      { name: User.name, schema: UserSchema },
       {
-        name: NotificationSettingSchema.name,
-        schema: NotificationSettingSchema.schema,
+        name: NotificationSetting.name,
+        schema: NotificationSettingSchema,
       },
-      { name: NotificationSchema.name, schema: NotificationSchema.schema },
+      { name: Notification.name, schema: NotificationSchema },
       {
-        name: NotificationTemplateSchema.name,
-        schema: NotificationTemplateSchema.schema,
+        name: NotificationTemplate.name,
+        schema: NotificationTemplateSchema,
       },
     ]),
   ],

@@ -1,11 +1,9 @@
 import { translateText } from '$utils/common';
 import { ObjectId } from '$utils/mongoose';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import {
-  DictionaryRepository,
-  TranslateRepository,
-} from '../dictionary.repository';
+import { DictionaryRepository } from '../dictionary.repository';
 import { ITranslateCore } from '../interfaces/dictionary.interfaces';
+import { TranslateRepository } from '../repository';
 @Injectable()
 export class TranslateService {
   constructor(

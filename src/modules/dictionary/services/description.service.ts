@@ -1,7 +1,7 @@
 import { ObjectId } from '$utils/mongoose';
 import { Injectable } from '@nestjs/common';
-import { DescriptionRepository } from '../dictionary.repository';
 import { IDescriptionCore } from '../interfaces/dictionary.interfaces';
+import { DescriptionRepository } from '../repository';
 @Injectable()
 export class DescriptionService {
   constructor(private readonly descriptionRepo: DescriptionRepository) {}

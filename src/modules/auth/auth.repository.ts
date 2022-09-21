@@ -2,11 +2,11 @@ import { IAuthModel } from './auth.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseRepository } from '../../base/base.repository';
-import { SessionSchema } from './schemas/auth.schema';
+import { Session } from './schemas/auth.schema';
 
 @Injectable()
 export class SessionRepository extends BaseRepository<IAuthModel> {
-  constructor(@InjectModel(SessionSchema.name) model) {
+  constructor(@InjectModel(Session.name) model) {
     super(model);
   }
 
